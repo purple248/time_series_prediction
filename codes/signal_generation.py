@@ -6,9 +6,8 @@ import pickle
 
 
 
-def sine_data_func(f):
-    #input f = frequency
-    t = np.arange(-10,10,0.1)
+def sine_data_func(f): #input f = frequency
+    t = np.arange(-1000,1000,0.1)
     T = 1/f  # period duration
     w = 2 * math.pi * f  # angular frequency
     signal = np.sin(w*t)

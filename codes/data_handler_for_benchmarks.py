@@ -8,16 +8,16 @@ import pickle
 class DataHandler:
 
     def __init__(self):
-        with open("../configs/data_config.yml") as f:
-            configs = yaml.load(f, Loader=yaml.FullLoader)
-
-        with open(configs['2_sine_no_noise'], 'rb') as handle:
+        with open('../data/2_sine_signal.pickel', 'rb') as handle:
             self.generated_data = pickle.load(handle)
+
+        # another optional data:
+        # with open('../data/triple_sine_signal.pickel', 'rb') as handle:
+        #     self.generated_data = pickle.load(handle)
 
         self.df = pd.DataFrame(data=self.generated_data, index=None, columns=['x'])
         self.adding_history()
         self.train_test_split()
-
 
 
     def check_autocorr(self):
@@ -29,9 +29,6 @@ class DataHandler:
         plt.ylabel('autocorralation')
         plt.show()
 
-    def check_seasonality(self):
-        #TODO FILL
-        pass
 
     def adding_history(self):
         #adding 3 days historical raw_signal:
@@ -76,7 +73,7 @@ class DataHandler:
         #scaler:
         x_mean_train = np.mean(self.x_train, axis=0)
         x_std_train = np.std(self.x_train, axis=0)
-        # normalizations:
+        # normalization:
         self.x_train = np.dot((self.x_train - x_mean_train),np.diag(1/x_std_train))
         self.x_test = np.dot((self.x_test - x_mean_train),np.diag(1/x_std_train))
 

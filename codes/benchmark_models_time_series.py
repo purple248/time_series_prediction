@@ -10,6 +10,7 @@ class BasicModels:
         self.x_train, self.x_test, self.y_train, self.y_test = x_train, x_test, y_train, y_test
 
     def print_save_errors(self, true_y, predicted_y, model_name):
+        # help function to calculate errors, save errors, and plot the predicted y compared to true y.
         from sklearn.metrics import r2_score
         from sklearn import metrics
         r2_square = r2_score(true_y, predicted_y)
@@ -24,40 +25,31 @@ class BasicModels:
         print(f"RMSE: {rmse}\n")
 
         import matplotlib.pyplot as plt
-        # plt.plot(range(len(self.y_test)), self.y_test, lw=1.5, color='blue', label='original')
-        # plt.plot(range(len(self.y_test)), predicted_y, lw=1.5, color='red', label='predicted')
-        plt.plot(range(100), self.y_test[-100:], lw=1.5, color='blue', label='original')
+        plt.plot(range(100), true_y[-100:], lw=1.5, color='blue', label='original')
         plt.plot(range(100), predicted_y[-100:], lw=1.5, color='red', label='predicted')
         plt.legend()
         plt.title(model_name)
         plt.show()
 
-        file_path = "../results/benchmark_rez.csv"
-        with open(file_path, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([model_name, r2_square, mse, mae, rmse])
-        print("test rez saved")
-        return
-
+        # file_path = "../results/benchmark_rez.csv"
+        # with open(file_path, 'a', newline='') as file:
+        #     writer = csv.writer(file)
+        #     writer.writerow([model_name, r2_square, mse, mae, rmse])
+        # print("test rez saved")
+        # return
 
 
     def LinearRegression(self):
         from sklearn.linear_model import LinearRegression
         model = LinearRegression()
         model.fit(self.x_train, self.y_train)
-
-        print("linear regression results:")
-        #print(list(zip(self.x_train.columns, model.coef_)))
         preds = model.predict(self.x_test)
 
-        x_train_new = pd.DataFrame(self.x_train)
-        x_train_new['bias'] = 1
-        theta_hat = np.dot(np.dot(np.linalg.inv(np.dot(x_train_new.T, x_train_new)), x_train_new.T), self.y_train)
-        print("theta_hat: {}" .format(theta_hat))
-
+        print("linear regression results:")
         self.print_save_errors(self.y_test, preds, "linear regression")
 
     def krr(self):
+        #checking krr model with different kernels
         from sklearn.kernel_ridge import KernelRidge
         model_lin = KernelRidge(alpha=1.0)
         model_lin.fit(self.x_train, self.y_train)
@@ -75,6 +67,7 @@ class BasicModels:
         self.print_save_errors(self.y_test, preds, "KRR polynomial")
 
     def svr(self):
+        # checking svr model with different kernels
         from sklearn.svm import SVR
         model_lin = SVR(kernel='linear' , epsilon=0.01) #gamma='scale' - less good results
         model_rbf = SVR(kernel='rbf', epsilon=0.01, gamma= 0.19) #after checking for the best gamma
@@ -108,9 +101,6 @@ class BasicModels:
         preds = model.predict(self.x_test)
         self.print_save_errors(self.y_test, preds, "random forest")
 
-    # def autoregression(self): #TODO add autoregression
-    #     from statsmodels.tsa.ar_model import AR
-
 
 
 if __name__ == '__main__':
@@ -120,7 +110,7 @@ if __name__ == '__main__':
 
     bm = BasicModels(x_train, x_test, y_train, y_test)
 
-    data_name = "20k_2_sine_signal_no_noise"
+    data_name = "20k_2_sine_signal"
     file_path = "../results/benchmark_rez.csv"
     with open(file_path, 'a', newline='') as file:
         writer = csv.writer(file)

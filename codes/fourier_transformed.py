@@ -1,3 +1,4 @@
+# steps:
 # read data
 # split train test
 # do sliding window - get X, Y
@@ -10,7 +11,6 @@ import math
 import matplotlib.pyplot as plt
 from sklearn import metrics
 import csv
-
 
 
 def sine_data_func():
@@ -39,7 +39,7 @@ def get_sliding_window_data(signal, seq_length_x, seq_length_y):
 
 
 def fourier_func(signal):
-    # calculate the fourier trasform of the signal
+    # calculate the fourier trasform of the signal, magnitude and phase
     F_signal = np.fft.fft(signal, axis=1)
     magnitude = np.abs(F_signal)
     phase = np.angle(F_signal)
@@ -121,7 +121,7 @@ data_train = signal[:split_point]
 data_test = signal[split_point:]
 
 
-model_name ="random_forest"
+model_name ="random_forest" #for saving results
 
 window_range = [3,10,15]
 for seq_length_x in window_range:
@@ -129,7 +129,7 @@ for seq_length_x in window_range:
     print(seq_length_y)
     print(seq_length_x)
 
-    # ftt to all rows in the X , Y after window:
+    # ftt to all rows in the X , Y after sliding windows:
     X_train, Y_train, y_train_signal = get_sliding_window_data(data_train, seq_length_x, seq_length_y)
     mag_X_train, phase_X_train = fourier_func(X_train)
     mag_Y_train, phase_Y_train = fourier_func(Y_train)

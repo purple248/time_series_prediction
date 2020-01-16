@@ -31,12 +31,12 @@ class BasicModels:
         plt.title(model_name)
         plt.show()
 
-        # file_path = "../results/benchmark_rez.csv"
-        # with open(file_path, 'a', newline='') as file:
-        #     writer = csv.writer(file)
-        #     writer.writerow([model_name, r2_square, mse, mae, rmse])
-        # print("test rez saved")
-        # return
+        file_path = "../results/benchmark_rez.csv"
+        with open(file_path, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([model_name, r2_square, mse, mae, rmse])
+        print("test rez saved")
+        return
 
 
     def LinearRegression(self):
